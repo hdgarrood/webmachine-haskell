@@ -4,6 +4,7 @@ module Main where
 
 import qualified Data.Map as M
 import Data.Maybe
+import Data.Text
 
 import Happstack.Server
 import Text.Blaze ((!))
@@ -11,14 +12,14 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
 -- shortcut function for the default layout
-getParam :: M.Map String H.Html -> String -> H.Html
-getParam params key = fromMaybe (H.toHtml ("" :: String)) $ M.lookup key params
+getParam :: M.Map Text H.Html -> Text -> H.Html
+getParam params key = fromMaybe (H.toHtml ("" :: Text)) $ M.lookup key params
 
 -- default layout. Takes a map of HTML snippets and returns HTML
-defaultLayout :: M.Map String H.Html -> H.Html
+defaultLayout :: M.Map Text H.Html -> H.Html
 defaultLayout params =
-    let getParam params = param in
-    H.docTypeHtml $ do
+    let param = getParam params
+    in H.docTypeHtml $ do
         H.html $ do
             H.head $ do
                 H.title "School Shop"
