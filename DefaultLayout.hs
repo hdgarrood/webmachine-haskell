@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Main where
+module DefaultLayout (defaultLayout) where
 
 import qualified Data.Map as M
 import Data.Maybe
@@ -49,5 +49,5 @@ helloBlaze =
         ("body", H.p "Hello")
     ]
 
-main :: IO ()
-main = simpleHTTP nullConf $ helloBlaze
+--main :: IO ()
+--main = simpleHTTP nullConf $ helloBlaze
