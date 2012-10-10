@@ -11,13 +11,29 @@ import qualified Data.Map as M
 
 import Happstack.Server
 import qualified Text.Blaze.Html5 as H
+import Text.Blaze.Html5 ((!))
 import qualified Text.Blaze.Html5.Attributes as A
+--import qualified Text.Reform.Blaze.Common as R
+import qualified Text.Reform.Blaze.Text as R
+
 import DefaultLayout (defaultLayout)
+
+type SimpleForm = 
+
+data Message = Message { name :: Text,
+                         title :: Text,
+                         contents :: Text }
+
+simpleForm :: SimpleForm Message
+simpleForm = R.form
+    (A.enctype "multipart/form-data" ! A.method "POST")
+    [("","")]
+    (R.inputText "hello")
 
 testLayout :: ServerPart Response
 testLayout = ok $ toResponse $ defaultLayout $ M.fromList
     [
-        ("body", H.h1 "Hello World!!")
+        ("body", simpleForm)
     ]
 
 main :: IO ()
