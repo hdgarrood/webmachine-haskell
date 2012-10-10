@@ -1,0 +1,24 @@
+Default: &defaults
+  user: SchoolShop
+  password: SchoolShop
+  host: localhost
+  port: 5432
+  database: SchoolShop
+  poolsize: 10
+
+Development:
+  <<: *defaults
+
+Testing:
+  database: SchoolShop_test
+  <<: *defaults
+
+Staging:
+  database: SchoolShop_staging
+  poolsize: 100
+  <<: *defaults
+
+Production:
+  database: SchoolShop_production
+  poolsize: 100
+  <<: *defaults
