@@ -16,7 +16,8 @@ getParam params key = fromMaybe (H.toHtml ("" :: String)) $ M.lookup key params
 
 -- default layout. Takes a map of HTML snippets and returns HTML
 defaultLayout :: M.Map String H.Html -> H.Html
-defaultLayout params = 
+defaultLayout params =
+    let getParam params = param in
     H.docTypeHtml $ do
         H.html $ do
             H.head $ do
@@ -25,22 +26,22 @@ defaultLayout params =
                 H.meta !
                     A.httpEquiv "X-UA-Compatible" !
                     A.content "IE=edge,Chrome=1"
-                getParam params "stylesheet_link_tag"
-                getParam params "javascript_link_tag"
-                getParam params "csrf_meta_tags"
+                param "stylesheet_link"
+                param "javascript_link"
+                param "csrf_meta"
             H.body $ do
                 H.div ! A.class_ "container" $ do
                     H.header $ do
                         H.h1 "School Shop"
-                        getParam params "navigation"
+                        param "navigation"
                     H.section ! A.id "main" $ do
-                        getParam params "show_flash"
-                        getParam params "body"
+                        param "show_flash"
+                        param "body"
 
 helloBlaze :: ServerPart Response
 helloBlaze =
     ok $ toResponse $ defaultLayout $ M.fromList [
-        ("stylesheet_link_tag",
+        ("stylesheet_link",
         H.link ! A.rel "stylesheet" !
             A.type_ "text/css" !
             A.href "http://localhost:3000/assets/application.css"),
