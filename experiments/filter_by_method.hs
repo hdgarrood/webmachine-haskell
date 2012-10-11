@@ -1,9 +1,8 @@
-module App.OtherRoutes where
 
 import Control.Monad (msum)
 import Happstack.Server (Method(GET, POST), dir, methodM, nullConf, ok, simpleHTTP)
 
-routes = msum 
+main = simpleHTTP nullConf $ msum 
        [ do methodM GET
             ok $ "You did a GET request.\n"
        , do methodM POST
