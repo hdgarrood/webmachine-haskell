@@ -1,13 +1,16 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 
 module Lib.RequestHelpers
     --(head, get, post, put, delete)
     where
 
 import Data.Maybe
-import Data.ByteString.Internal
+import Data.ByteString
 import Data.Conduit
 import Language.Haskell.TH
+
+import qualified Control.Monad.IO.Class as M
+import qualified Control.Monad.Trans.Control as M
 
 import Test.HUnit
 import Network.HTTP.Conduit
@@ -23,8 +26,14 @@ sendRequest req =
         return (status, headers, body)
 
 
-methodWrapper :: Method -> String -> String
-                -> m (Status, ResponseHeaders, Body)
+methodWrapper :: (M.MonadIO m,
+                M.MonadBaseControl IO m,
+                MonadUnsafeIO m,
+                MonadThrow m) =>
+                Method -> String -> String
+                -> m (Status,
+                        ResponseHeaders, 
+                        ResumableSource (ResourceT m) ByteString)
 methodWrapper meth base url =
     let req = fromJust $ parseUrl (base ++ url)
         req' = req { method = meth
@@ -32,8 +41,8 @@ methodWrapper meth base url =
                    }
     in sendRequest req'
 
---get = methodWrapper "GET" baseUrlString
---post = methodWrapper "POST" baseUrlString
---head = methodWrapper "HEAD" baseUrlString
---put = methodWrapper "PUT" baseUrlString
---delete = methodWrapper "DELETE" baseUrlString
+--get = methodWrapper methodGet baseUrlString
+--post = methodWrapper methodPost baseUrlString
+--head = methodWrapper methodHead baseUrlString
+--put = methodWrapper methodPut baseUrlString
+--delete = methodWrapper methodDelete baseUrlString
