@@ -17,7 +17,7 @@ resources = msum
         [ method GET >> indexR
         , method POST >> createR
         ]
-    , dir "new" $ newR
+    , dir "new" $ nullDir >> newR
     , path showR
     ]
 
