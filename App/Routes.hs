@@ -11,8 +11,8 @@ routes = resources
 
 resources :: ServerPart Response
 resources = msum
-    --[ nullDir $ index
-    [ dir "new" $ new
+    [ nullDir >> index
+    , dir "new" $ new
     ]
 
 simpleResponse :: Text -> ServerPart Response
