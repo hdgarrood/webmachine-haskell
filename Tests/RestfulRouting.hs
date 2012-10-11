@@ -1,4 +1,4 @@
-module Tests.RestfulRouting where
+module RestfulRouting where
 
 import Data.Maybe
 
@@ -9,8 +9,9 @@ import qualified Data.ByteString.Lazy as L
 
 url = fromJust $ parseUrl "http://localhost:3000/"
 
-test1 = TestCase (do
-            (s,b) <- withManager $ \manager -> do
-                Response status _ _ body <- http url manager
-                return (status, body)
-            assertEqual "status should be 200" status200 s)
+testGetsIndex =
+    TestCase (do
+        (s,b) <- withManager $ \manager -> do
+            Response status _ _ body <- http url manager
+            return (status, body)
+        assertEqual "status should be 200" status200 s)
