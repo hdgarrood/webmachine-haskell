@@ -18,7 +18,9 @@ resources = msum
         , method POST >> createR
         ]
     , dir "new" $ nullDir >> newR
-    , path $ \id -> (nullDir >> showR id)
+    , path $ \id -> msum
+        [ nullDir >> showR id
+        ]
     ]
 
 simpleResponse :: Text -> ServerPart Response
