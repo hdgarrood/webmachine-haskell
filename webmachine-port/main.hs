@@ -54,7 +54,7 @@ handle res = do
     if available
         then do
             knownMeths <- knownMethods res
-            W.Request {W.requestMethod = rqMeth} <- ask
+            rqMeth <- asks W.requestMethod
             if rqMeth `elem` knownMeths
                 then do
                     allowedMeths <- allowedMethods res
