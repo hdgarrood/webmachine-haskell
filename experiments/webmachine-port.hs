@@ -65,6 +65,6 @@ serviceUnavailable = HS.resp 503 (HS.toResponse T.empty)
 
 main :: IO ()
 main = HS.simpleHTTP HS.nullConf $ msum
-    [ HS.dir "posts" $ handle PostsCollection
+    [ HS.dir "posts" $ HS.nullDir >> handle PostsCollection
     , HS.dir "posts" $ HS.path (\postId -> HS.nullDir >> handle (Post postId))
     ]
