@@ -1,9 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Monad.Reader
-import Safe (readMay)
 import qualified Data.ByteString.Lazy as BS
-import qualified Data.ByteString.Lazy.Char8 as BS8 (pack) 
+import qualified Data.ByteString.Lazy.Char8 as BS8
 
 import qualified Network.Wai as W
 import qualified Network.HTTP.Types as H
@@ -11,6 +10,7 @@ import Network.Wai.Handler.Warp (run)
 
 import Monads (ServerMonad)
 import Resource
+import Decision (handle)
 
 data PostsCollection = PostsCollection
 
@@ -25,35 +25,6 @@ instance Resource Post where
         "This is the page for post "
         `BS.append` (BS8.pack $ show $ postId)
         `BS.append` ".\n"
-
--- the main entry point. Takes a resource and returns a response
-handle :: (Resource a) => a -> ServerMonad W.Response
-handle res = do
-    available <- serviceAvailable res
-    if available
-        then do
-            knownMeths <- knownMethods res
-            rqMeth <- asks W.requestMethod
-            if rqMeth `elem` knownMeths
-                then do
-                    allowedMeths <- allowedMethods res
-                    if rqMeth `elem` allowedMeths
-                        then do
-                            text <- toText res
-                            return $ W.responseLBS H.ok200 [] text
-                        -- TODO: list of allowed methods in Accept header
-                        else methodNotAllowed 
-                else notImplemented
-        else serviceUnavailable
-
-methodNotAllowed :: ServerMonad W.Response
-methodNotAllowed = return $ W.responseLBS H.status405 [] ""
-
-notImplemented :: ServerMonad W.Response
-notImplemented = return $ W.responseLBS H.status501 [] ""
-
-serviceUnavailable :: ServerMonad W.Response
-serviceUnavailable = return $ W.responseLBS H.status503 [] ""
 
 app :: W.Application
 app req = case W.rawPathInfo req of
