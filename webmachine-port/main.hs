@@ -9,8 +9,7 @@ import qualified Network.Wai as W
 import qualified Network.HTTP.Types as H
 import Network.Wai.Handler.Warp (run)
 
--- combines ability to read the request with doing IO actions
-type ServerMonad = ReaderT W.Request IO
+import Monads
 
 class Resource a where
     serviceAvailable :: a -> ServerMonad Bool
@@ -77,12 +76,10 @@ serviceUnavailable :: ServerMonad W.Response
 serviceUnavailable = return $ W.responseLBS H.status503 [] ""
 
 app :: W.Application
-app req = let ioResponse =
-                  case W.rawPathInfo req of
-                      "/posts"    -> runReaderT (handle PostsCollection) req
-                      "/posts/1"  -> runReaderT (handle $ Post $ PostId 1) req
-                      _           -> return $ W.responseLBS H.status404 [] ""
-          in lift ioResponse
+app req = case W.rawPathInfo req of
+              "/posts"    -> runReaderT (handle PostsCollection) req
+              "/posts/1"  -> runReaderT (handle $ Post $ PostId 1) req
+              _           -> return $ W.responseLBS H.status404 [] ""
 
 main :: IO ()
 main = run 3000 app
