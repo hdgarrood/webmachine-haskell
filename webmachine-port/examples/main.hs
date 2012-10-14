@@ -21,7 +21,7 @@ instance Resource PostsCollection where
     render _ "text/plain" = return "PostsCollection: Here are all the posts.\n"
 
 instance Resource Post where
-    render (Post postId) "text/plain" = return $
+    render (Post (PostId postId)) "text/plain" = return $
         "This is the page for post "
         `BS.append` (BS8.pack $ show $ postId)
         `BS.append` ".\n"
