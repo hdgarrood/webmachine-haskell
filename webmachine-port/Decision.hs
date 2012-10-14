@@ -6,7 +6,7 @@ import Control.Monad.Reader
 import qualified Network.Wai as W
 import qualified Network.HTTP.Types as H
 
-import Monads
+import Types
 import Resource
 
 -- the main entry point. Takes a resource and returns a response

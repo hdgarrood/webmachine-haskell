@@ -8,7 +8,7 @@ import qualified Network.Wai as W
 import qualified Network.HTTP.Types as H
 import Network.Wai.Handler.Warp (run)
 
-import Monads (ServerMonad)
+import Types (ServerMonad)
 import Resource
 import Decision (handle)
 

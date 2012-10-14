@@ -1,4 +1,4 @@
-module Monads (ServerMonad) where
+module Types (ServerMonad) where
 
 import Control.Monad.Reader
 import Control.Monad.Trans.Resource
