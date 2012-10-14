@@ -5,9 +5,12 @@ module Resource ( Resource
                 , knownMethods
                 , allowedMethods
                 , render
+                , toURI
+                , fromURI
                 ) where
 
 import qualified Data.ByteString.Lazy as BS
+import qualified Data.ByteString as SBS
 import qualified Network.HTTP.Types as H
 
 import Types ( ServerMonad
@@ -42,6 +45,5 @@ class Resource a where
     render :: a -> BS.ByteString -> ServerMonad BS.ByteString
     render _ _ = return ""
 
-    fromURI :: BS.ByteString -> Maybe a
-
-    toURI :: a -> BS.ByteString
+    toURI :: a -> SBS.ByteString
+    fromURI :: SBS.ByteString -> Maybe a
