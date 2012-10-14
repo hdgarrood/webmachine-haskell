@@ -76,16 +76,11 @@ notImplemented = return $ W.responseLBS H.status501 [] ""
 serviceUnavailable :: ServerMonad W.Response
 serviceUnavailable = return $ W.responseLBS H.status503 [] ""
 
-app :: W.Application
-app req = case W.rawPathInfo req of
-            "/posts"    -> runReaderT (handle PostsCollection) req
-            "/posts/1"  -> runReaderT (handle Post (PostId 1)) req
-            _           -> return $ H.status404 [] "LULZ"
+--app :: W.Application
+--app req = case W.rawPathInfo req of
+--            "/posts"    -> runReaderT (handle PostsCollection) req
+--            "/posts/1"  -> runReaderT (handle Post (PostId 1)) req
+--            _           -> return $ H.status404 [] "LULZ"
 
-main :: IO ()
-main = run 3000 app
 --main :: IO ()
---main = HS.simpleHTTP HS.nullConf $ msum
---    [ HS.dir "posts" $ HS.nullDir >> handle PostsCollection
---    , HS.dir "posts" $ HS.path (\postId -> handle (Post postId))
---    ]
+--main = run 3000 app
