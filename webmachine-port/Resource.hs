@@ -28,7 +28,16 @@ class Resource a where
         ]
 
     allowedMethods :: a -> ServerMonad [H.Method]
-    allowedMethods = knownMethods
+    allowedMethods = const $ return
+        [ "GET"
+        , "HEAD"
+        , "OPTIONS"
+        , "TRACE"
+        ]
 
     toHtml :: a -> ServerMonad BS.ByteString
     toText :: a -> ServerMonad BS.ByteString
+
+    fromURI :: BS.ByteString -> Maybe a
+
+    toURI :: a -> BS.ByteString
