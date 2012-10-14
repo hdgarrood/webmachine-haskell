@@ -24,6 +24,7 @@ class Resource a where
         , "DELETE"
         , "OPTIONS"
         , "TRACE"
+        , "PATCH"
         ]
 
     allowedMethods :: a -> ServerMonad [H.Method]
