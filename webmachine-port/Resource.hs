@@ -9,7 +9,11 @@ module Resource ( Resource
 
 import qualified Data.ByteString.Lazy as BS
 import qualified Network.HTTP.Types as H
-import Types (ServerMonad)
+
+import Types ( ServerMonad
+             , ToResponse
+             , toResponse
+             )
 
 class Resource a where
     serviceAvailable :: a -> ServerMonad Bool

@@ -25,16 +25,7 @@ handle res = do
                             text <- render res "text/plain"
                             return $ W.responseLBS H.ok200 [] text
                         -- TODO: list of allowed methods in Accept header
-                        else methodNotAllowed
-                else notImplemented
-        else serviceUnavailable
-
-methodNotAllowed :: ServerMonad W.Response
-methodNotAllowed = return $ W.responseLBS H.status405 [] ""
-
-notImplemented :: ServerMonad W.Response
-notImplemented = return $ W.responseLBS H.status501 [] ""
-
-serviceUnavailable :: ServerMonad W.Response
-serviceUnavailable = return $ W.responseLBS H.status503 [] ""
+                        else toResponse H.methodNotAllowed405
+                else toResponse H.notImplemented501
+        else toResponse H.serviceUnavailable503
 
