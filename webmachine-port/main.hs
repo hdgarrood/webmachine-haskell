@@ -9,28 +9,8 @@ import qualified Network.Wai as W
 import qualified Network.HTTP.Types as H
 import Network.Wai.Handler.Warp (run)
 
-import Monads
-
-class Resource a where
-    serviceAvailable :: a -> ServerMonad Bool
-    serviceAvailable = const $ return True
-
-    knownMethods :: a -> ServerMonad [H.Method]
-    knownMethods = const $ return 
-        [ "GET"
-        , "HEAD"
-        , "POST"
-        , "PUT"
-        , "DELETE"
-        , "OPTIONS"
-        , "TRACE"
-        ]
-
-    allowedMethods :: a -> ServerMonad [H.Method]
-    allowedMethods = knownMethods
-
-    toHtml :: a -> ServerMonad BS.ByteString
-    toText :: a -> ServerMonad BS.ByteString
+import Monads (ServerMonad)
+import Resource
 
 data PostsCollection = PostsCollection
 
@@ -42,7 +22,7 @@ instance Resource PostsCollection where
 
 instance Resource Post where
     toText (Post postId) = return $
-        "This is the page for post"
+        "This is the page for post "
         `BS.append` (BS8.pack $ show $ postId)
         `BS.append` ".\n"
 
