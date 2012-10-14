@@ -76,11 +76,13 @@ notImplemented = return $ W.responseLBS H.status501 [] ""
 serviceUnavailable :: ServerMonad W.Response
 serviceUnavailable = return $ W.responseLBS H.status503 [] ""
 
---app :: W.Application
---app req = case W.rawPathInfo req of
---            "/posts"    -> runReaderT (handle PostsCollection) req
---            "/posts/1"  -> runReaderT (handle Post (PostId 1)) req
---            _           -> return $ H.status404 [] "LULZ"
+app :: W.Application
+app req = let ioResponse =
+                  case W.rawPathInfo req of
+                      "/posts"    -> runReaderT (handle PostsCollection) req
+                      "/posts/1"  -> runReaderT (handle $ Post $ PostId 1) req
+                      _           -> return $ W.responseLBS H.status404 [] ""
+          in lift ioResponse
 
---main :: IO ()
---main = run 3000 app
+main :: IO ()
+main = run 3000 app
