@@ -4,8 +4,7 @@ module Resource ( Resource
                 , serviceAvailable
                 , knownMethods
                 , allowedMethods
-                , toHtml
-                , toText
+                , render
                 ) where
 
 import qualified Data.ByteString.Lazy as BS
@@ -35,8 +34,8 @@ class Resource a where
         , "TRACE"
         ]
 
-    toHtml :: a -> ServerMonad BS.ByteString
-    toText :: a -> ServerMonad BS.ByteString
+    render :: a -> BS.ByteString -> ServerMonad BS.ByteString
+    render _ _ = return ""
 
     fromURI :: BS.ByteString -> Maybe a
 

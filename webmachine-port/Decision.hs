@@ -22,7 +22,7 @@ handle res = do
                     allowedMeths <- allowedMethods res
                     if rqMeth `elem` allowedMeths
                         then do
-                            text <- toText res
+                            text <- render res "text/plain"
                             return $ W.responseLBS H.ok200 [] text
                         -- TODO: list of allowed methods in Accept header
                         else methodNotAllowed

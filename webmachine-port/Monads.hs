@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeSynonymInstances, FlexibleInstances #-}
+
 module Monads (ServerMonad) where
 
 import Control.Monad.Reader

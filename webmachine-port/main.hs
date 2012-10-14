@@ -18,10 +18,10 @@ newtype PostId = PostId Int deriving (Show, Read, Eq, Ord)
 data Post = Post PostId
 
 instance Resource PostsCollection where
-    toText _ = return "PostsCollection: Here are all the posts.\n"
+    render _ "text/plain" = return "PostsCollection: Here are all the posts.\n"
 
 instance Resource Post where
-    toText (Post postId) = return $
+    render (Post postId) "text/plain" = return $
         "This is the page for post "
         `BS.append` (BS8.pack $ show $ postId)
         `BS.append` ".\n"
