@@ -1,8 +1,4 @@
-{-# LANGUAGE OverloadedStrings, TemplateHaskell, TypeOperators #-}
-
---import qualified Data.ByteString as SBS
---import qualified Data.ByteString.Lazy as BS
---import qualified Data.ByteString.Lazy.Char8 as BS8
+{-# LANGUAGE OverloadedStrings #-}
 
 import qualified Network.Wai as W
 import Network.Wai.Handler.Warp (run)
