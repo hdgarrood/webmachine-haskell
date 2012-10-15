@@ -4,6 +4,7 @@ module Decision where
 
 import Control.Monad.Reader
 import Control.Monad.Writer
+import Data.Conduit (ResourceT)
 
 import qualified Network.Wai as W
 import qualified Network.HTTP.Types as H
@@ -54,10 +55,13 @@ b11 res = do
             return $ W.responseLBS H.ok200 [] text
         else lift $ toResponse H.methodNotAllowed405
 
--- the main entry point. Takes a resource and returns a response
--- unwraps the Trace as well
-handle :: (Resource a) => a -> ServerMonad W.Response
-handle res = do
+-- the main entry point. Takes a resource and a request, and returns a
+-- response. Also unwraps and prints the Trace.
+handle :: (Resource a) => a -> W.Request -> ResourceT IO W.Response
+handle res req = runReaderT (handle' res) req
+
+handle' :: (Resource a) => a -> ServerMonad W.Response
+handle' res = do
     (resp, js) <- runWriterT (decide res)
     liftIO $ printJuncList js
     return resp

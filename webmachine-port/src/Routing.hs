@@ -1,20 +1,26 @@
+{-# LANGUAGE Rank2Types, ImpredicativeTypes #-}
+
 module Routing where
 
-import Control.Monad.Reader
-
-import qualified Data.ByteString.Lazy as BS
-import qualified Data.ByteString as SBS
-import qualified Network.Wai as W
+import qualified Data.ByteString as BS
 import qualified Network.HTTP.Types as H
+import qualified Network.Wai as W
+import Data.Text (Text)
 
+import Decision (handle)
+import Internal (unServerMonad)
 import Resource
 import Types
-import Decision (handle)
 
-makeApplication :: (Resource a) => [a] -> W.Application
-makeApplication [] req = runReaderT (toResponse H.notFound404) req
-makeApplication (r:rs) req
-    | r `matches` (W.rawPathInfo req) = runReaderT (handle r) req
-    | otherwise                       = makeApplication rs req
+-- maps URI patterns to Resources
+makeApp :: (Resource a) => [(BS.ByteString, a)] -> W.Application
+makeApp [] req = unServerMonad (toResponse H.notFound404) req
+makeApp (r:rs) req =
+    if patternMatches resInfo reqInfo
+        then handle (snd r) req
+        else makeApp rs req
+    where reqInfo = W.pathInfo req
+          resInfo = H.decodePathSegments $ fst r
 
-makeRoutes :: [(SBS.ByteString, 
+patternMatches :: [Text] -> [Text] -> Bool
+patternMatches _ _ = True
