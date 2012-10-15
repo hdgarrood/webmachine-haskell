@@ -14,7 +14,7 @@ instance Resource Posts where
 
 app :: W.Application
 app = makeApp [
-    ("/posts/:id", Posts)
+    ("/posts/(:id)", Posts)
     ]
 
 main :: IO ()
