@@ -1,3 +1,4 @@
 make routing work (perhaps design wrapper around boomerang?)
 Move Resource into Types
 Make Resource a sub-typeclass of Renderable and override default implementation
+Support HTTP Trace method
