@@ -5,8 +5,6 @@ module Resource ( Resource
                 , knownMethods
                 , allowedMethods
                 , render
-                , toURI
-                , fromURI
                 ) where
 
 import qualified Data.ByteString.Lazy as BS
@@ -38,12 +36,7 @@ class Resource a where
     allowedMethods = const $ return
         [ "GET"
         , "HEAD"
-        , "OPTIONS"
-        , "TRACE"
         ]
 
     render :: a -> BS.ByteString -> ServerMonad BS.ByteString
     render _ _ = return ""
-
-    toURI :: a -> SBS.ByteString
-    fromURI :: SBS.ByteString -> Maybe a
